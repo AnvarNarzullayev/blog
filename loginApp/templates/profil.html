@@ -178,19 +178,20 @@
                                 <div class="bg-gray p-3 rounded-rounded">
                                     <h3 class="fs-17">Change password</h3>
                                 </div>
-                                <form method="post" class="pt-20px">
+                                <form method="POST" class="pt-20px">
+                                    {% csrf_token %}
                                     <div class="settings-item mb-30px">
                                         <div class="form-group">
                                             <label class="fs-13 text-black lh-20 fw-medium">Current Password</label>
-                                            <input class="form-control form--control password-field" type="password" name="password" placeholder="Current password">
+                                            {% render_field form1.old_password class="form-control form--control password-field" type="password" name="password" placeholder="Current password" %}
                                         </div>
                                         <div class="form-group">
                                             <label class="fs-13 text-black lh-20 fw-medium">New Password</label>
-                                            <input class="form-control form--control password-field" type="password" name="password" placeholder="New password">
+                                            {% render_field form1.new_password1 class="form-control form--control password-field" type="password" name="password" placeholder="New password" %}
                                         </div>
                                         <div class="form-group">
                                             <label class="fs-13 text-black lh-20 fw-medium">New Password (again)</label>
-                                            <input class="form-control form--control password-field" type="password" name="password" placeholder="New password again">
+                                            {% render_field form1.new_password2 class="form-control form--control password-field" type="password" name="password" placeholder="New password again" %}
                                             <p class="fs-14 lh-18 py-2">Passwords must contain at least eight characters, including at least 1 letter and 1 number.</p>
                                             <button class="btn theme-btn-outline theme-btn-outline-gray toggle-password" type="button" data-toggle="tooltip" data-placement="right" title="Show/hide password">
                                                 <svg class="eye-on" xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 0 24 24" width="22px" fill="#7f8897"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M12 6c3.79 0 7.17 2.13 8.82 5.5C19.17 14.87 15.79 17 12 17s-7.17-2.13-8.82-5.5C4.83 8.13 8.21 6 12 6m0-2C7 4 2.73 7.11 1 11.5 2.73 15.89 7 19 12 19s9.27-3.11 11-7.5C21.27 7.11 17 4 12 4zm0 5c1.38 0 2.5 1.12 2.5 2.5S13.38 14 12 14s-2.5-1.12-2.5-2.5S10.62 9 12 9m0-2c-2.48 0-4.5 2.02-4.5 4.5S9.52 16 12 16s4.5-2.02 4.5-4.5S14.48 7 12 7z"/></svg>
@@ -198,7 +199,7 @@
                                             </button>
                                         </div>
                                         <div class="submit-btn-box pt-3">
-                                            <button class="btn theme-btn" type="button">Change Password</button>
+                                            <button class="btn theme-btn" type="submit">Change Password</button>
                                         </div>
                                     </div>
                                     <div class="border border-gray p-4">
