@@ -1,0 +1,187 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% load blog_sidebar %}
+{% load widget_tweaks %}
+{% block content %}
+{% load bootstrap %}
+<section class="hero-area pattern-bg-2 bg-white shadow-sm overflow-hidden pt-20px pb-20px">
+    <span class="stroke-shape stroke-shape-1"></span>
+    <span class="stroke-shape stroke-shape-2"></span>
+    <span class="stroke-shape stroke-shape-3"></span>
+    <span class="stroke-shape stroke-shape-4"></span>
+    <span class="stroke-shape stroke-shape-5"></span>
+    <span class="stroke-shape stroke-shape-6"></span>
+    <div class="container">
+        <div class="hero-content text-center">
+            <h2 class="section-title pb-3">Bosh sahifa</h2>
+            <ul class="breadcrumb-list">
+                {% if user.is_authenticated %}
+                <li> <h4> Xush kelibsiz
+                    <a href="{% url 'profil' user.username %}">{% if user.first_name and user.last_name %} 
+                        {{ user.first_name }} {{user.last_name}}
+                        {% else %}
+                        {{user.username}}
+                        {% endif %}</a></h4>
+                </li>
+                {% else %}
+                <li>Xush kelibsiz mehmon</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</section>
+<div id="preloader">
+    <div class="loader">
+        <svg class="spinner" viewBox="0 0 50 50">
+            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+        </svg>
+    </div>
+</div>
+<section class="blog-area pt-50px">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="row">
+                    {% for i in filter %}
+                        <div class="col-lg-6 responsive-column-half">
+                        <div class="card card-item hover-y">
+                            <a href="{% url 'detail' i.slug %}" class="card-img">
+                                <img class="lazy" src="{{i.img.url}}" style="height: 275px;" data-src="{{i.img.url}}" alt="Card image">
+                            </a>
+                            <div class="card-body pt-0">
+                                <a href="{% url 'detail' i.slug %}" class="card-link">{{i.category_id}}</a>
+                                <h3>{{i.name}}</h3>
+                                <p class="card-title fw-medium">{{i.description.html|safe|truncatechars:150}}</p>
+                                <p class="pt-4">O'qilgan: {{i.views}}</p>
+                                <div class="media media-card align-items-center shadow-none p-0 mb-0 rounded-0 bg-transparent">
+                                    <a href="#" class="media-img media-img--sm d-block mr-2 rounded-full">
+                                        <img src="{% static 'img/people.jpg' %}" alt="avatar" class="rounded-full">
+                                    </a>
+                                    <div class="media-body">
+                                        <h5 class="fs-14 fw-medium">Muallif :<a href="#">{{i.user_id}}</a></h5>
+                                        <small class="meta d-block lh-20">
+                                            <span>{{i.created_at|date:"d M Y"}}</span>
+                                        </small>
+                                    </div>
+                                    <div class="media media-card align-items-center shadow-none p-0 mb-0 rounded-0 mt-4 bg-transparent">
+                                        {% if i.user_id.username == user.username %}
+                                        <a href="{% url 'update' i.slug %}" class="btn btn-primary media-body" data-toggle="tooltip" title="Yangilash"> Yangilash </a>
+                                        <a href="{% url 'delete' i.slug %}" class="btn btn-danger media-body" data-toggle="tooltip" title="O'chirish"> O'chirish</a>
+                                        {% endif %}
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+                {%  if blogs.has_other_pages %}
+                <div class="pager text-center pt-30px">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination generic-pagination justify-content-center">
+                            {% if blogs.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{blogs.previous_page_number}}" aria-label="Previous">
+                                    <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% for p in blogs.paginator.page_range %}
+
+                                {% if blogs.number == p %}
+                                    <li class="page-item active"><a class="page-link" href="?page={{p}}">{{p}}</a></li>
+                                {% elif p > blogs.number|add:-3 and p < blogs.number|add:3 %}
+                                    <li class="page-item"><a class="page-link" href="?page={{p}}">{{p}}</a></li>
+
+                                {% elif p == blogs.number|add:-3 %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                                    <li class="page-item disabled"><a class="page-link" aria-disabled="true" href="#">...</a></li>
+                                {% elif p == blogs.number|add:3 %}
+                                    <li class="page-item disabled"><a class="page-link" aria-disabled="true" href="#">...</a></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{cnt}}">{{cnt}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if blogs.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{blogs.next_page_number}}" aria-label="Next">
+                                        <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            {% endif %}
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card card-item">
+                        <div class="card-body">
+                            <h3 class="fs-17 pb-3">Izlash</h3>
+                            <div class="divider"><span></span></div>
+                            <form method="GET" class="pt-4">
+                                
+                                <div class="form-group mb-0">
+                                    <input class="form-control form--control form--control-bg-gray" type="text" name="search" placeholder="Type your search words...">
+                                    <button class="form-btn" type="submit"><i class="la la-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    {% show_categories %}
+
+                    <div class="card card-item">
+                        <div class="card-body">
+                            <h3 class="fs-17 pb-3">Eng ko'p o'qilgan bloglar</h3>
+                            <div class="divider"><span></span></div>
+                            <div class="sidebar-questions pt-3">
+                                {% for i in cnt %}
+                                <div class="media media-card media--card media--card-2">
+                                    <div class="media-body">
+                                        <h5><a href="{% url 'detail' i.slug %}">{{i.name}}</a></h5>
+                                        <small class="meta">
+                                            <span class="pr-1">O'qilgan: {{i.views}} marta. </span>
+                                            <span class="pr-1"> Muallif:</span>
+                                            <a href="{% url 'profil' i.user_id.username %}" class="author">{{i.user_id}}</a>
+                                        </small>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% show_tags %}
+
+                    <div class="card card-item">
+                        <div class="card-body">
+                            <h3 class="fs-17 pb-3">A'zo bo'lish</h3>
+                            <div class="divider"><span></span></div>
+                            <div class="social-icon-box pt-3">
+                                <a class="mr-1 icon-element icon-element-sm shadow-sm text-gray hover-y d-inline-block" href="https://telegram.me/Narzullayev_Anvar" target="_blank" data-toggle="tooltip" title="Telegram">
+                                    <i class="lab la-telegram"></i>                                
+                                </a>
+                                <a class="mr-1 icon-element icon-element-sm shadow-sm text-gray hover-y d-inline-block" href="https://www.instagram.com/anvarnarzullayev12/" target="_blank" data-toggle="tooltip" title="Instagram">
+                                    <i class="lab la-instagram"></i>                                
+                                </a>
+                                <a class="mr-1 icon-element icon-element-sm shadow-sm text-gray hover-y d-inline-block" href="#" target="_blank" data-toggle="tooltip" title="Twitter">
+                                    <i class="lab la-twitter"></i>                              
+                                </a>
+                                <a class="mr-1 icon-element icon-element-sm shadow-sm text-gray hover-y d-inline-block" href="https://www.facebook.com/people/Anvar-Narzullayev/100069403239333/" target="_blank" data-toggle="tooltip" title="Facebook">
+                                    <i class="lab la-facebook"></i>                               
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
