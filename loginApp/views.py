@@ -4,7 +4,6 @@ from django.contrib.auth import login
 from blog.models import MyUser , Comment ,Blog
 from taggit.models import Tag
 from django.contrib.auth.decorators import login_required
-from django.views.generic import DetailView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
@@ -49,6 +48,7 @@ def user_update(request, slug_name):
         form_password = PasswordChangeForm(user=request.user)
     return render(request, 'profil.html', {'form': form,'user':user,'form1':form_password})
 
+@login_required(login_url='login')
 def userprofile(request, slug_name):
     user = MyUser.objects.get(username=slug_name)
     blogs = Blog.objects.filter(user_id__username = slug_name)
