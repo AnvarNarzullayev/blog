@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import blog, blogDetail, TagView, CategoryDetailView , CreateBlog ,Categorylist, UpdateBlog , DeleteBlog, Privacy
+from .views import blog,search, blogDetail, TagView, CategoryDetailView , CreateBlog ,Categorylist, UpdateBlog , DeleteBlog, Privacy
 
 urlpatterns = [
     path('', blog, name="blog"),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('Update/<slug:slug>',UpdateBlog.as_view(),name = 'update'),
     path('delete/<slug:slug>',DeleteBlog.as_view(),name = 'delete'),
     path('Xavfsizlik',Privacy,name = 'privacy'),
+    path('search',search, name='product_search'),
 ]

@@ -17,17 +17,36 @@ def blog(request):
     paginator = Paginator(blogs, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    MyFilter = OrderFilter(request.GET, queryset=blogs)
-    blogs = MyFilter.qs
     cnt = Blog.objects.filter().order_by('-views')[:5]
     context = {
         "blogs": page_obj,
         "cnt":cnt,
-        "filter":blogs,
-        "myfilter":MyFilter
     }
     return render(request, 'blog.html', context)
 
+
+def search(request):
+    results = None
+    try:
+        query = request.POST['query']
+        results = Blog.objects.filter(name__icontains=query) |\
+            Blog.objects.filter(description__icontains=query)
+        paginator = Paginator(results, 6)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(
+            request,
+            'blog.html',
+            {'blogs': page_obj}
+        )
+    except KeyError:
+        "KeyError"
+        return render(
+            request,
+            'blog.html',
+            {'blogs': results}
+        )
 # class BlogListView(ListView):
 #     model = Blog
 #     template_name = 'blog.html'
@@ -121,7 +140,7 @@ def blogDetail(request, slug_name):
 
 def TagView(request, slug_tag):
     blogs = Blog.objects.filter(tag__slug=slug_tag)
-    return render(request, "blog.html", {'filter': blogs})
+    return render(request, "blog.html", {'blogs': blogs})
 
 class CategoryDetailView(DetailView):
     model = Category

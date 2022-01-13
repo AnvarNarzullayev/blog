@@ -42,7 +42,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="row">
-                    {% for i in filter %}
+                    {% for i in blogs %}
                         <div class="col-lg-6 responsive-column-half">
                         <div class="card card-item hover-y">
                             <a href="{% url 'detail' i.slug %}" class="card-img">
@@ -123,10 +123,10 @@
                         <div class="card-body">
                             <h3 class="fs-17 pb-3">Izlash</h3>
                             <div class="divider"><span></span></div>
-                            <form method="GET" class="pt-4">
-                                
+                            <form method="POST" action="{% url 'product_search' %}" class="pt-4">
+                                {% csrf_token %}
                                 <div class="form-group mb-0">
-                                    <input class="form-control form--control form--control-bg-gray" type="text" name="search" placeholder="Type your search words...">
+                                    <input class="form-control form--control form--control-bg-gray" type="text" name="query" placeholder="Type your search words...">
                                     <button class="form-btn" type="submit"><i class="la la-search"></i></button>
                                 </div>
                             </form>
